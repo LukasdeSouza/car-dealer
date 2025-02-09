@@ -19,6 +19,8 @@ export default function Thumbnails() {
   const [loading, setLoading] = useState(true);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [valorDeEntrada, setValorDeEntrada] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const formatarValorEntrada = (valor) => {
     const apenasNumeros = valor.replace(/\D/g, '');
@@ -26,11 +28,14 @@ export default function Thumbnails() {
     return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
 
+  console.log('carsInfo.length', carsInfo.length)
+  console.log('activeINdex', activeIndex)
+
   useEffect(() => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-    }, 1500)
+    }, 2500)
   }, [activeIndex])
 
   return (
@@ -38,10 +43,10 @@ export default function Thumbnails() {
       <div className='container'>
         <div className='mb-4'>
           <div className='flex flex-row items-baseline justify-between'>
-            <h2 className='text-2xl font-bold text-white'>My Car Viewer</h2>
+            <h2 className='text-3xl font-bold text-white'>MyCar Viewer</h2>
             <a href="https://www.codetech.software/br"
               target='_blank'
-              className='text-light text-slate-200 text-xs hover:underline'>
+              className='text-light text-red-600 text-xs hover:underline'>
               <code>
                 copyright Codetech Software 2025
               </code>
@@ -49,8 +54,10 @@ export default function Thumbnails() {
           </div>
           {/* <small>passe para o lado para ver nossos modelos 🔥</small> */}
           {loading
-            ? <p className='text-lg text-white font-bold text-green-600 mt-4'>Carregando Imagens...</p>
-            : <div className='flex flex-row items-center gap-4 mt-4'>
+            ? (<div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-50">
+              <p className='text-lg text-white font-bold text-green-600 mt-4'>Carregando Imagens...</p>
+            </div>
+            ) : (<div className='flex flex-row items-center gap-4 mt-4'>
               {activeIndex > 0 && (
                 <button
                   onClick={() => {
@@ -58,18 +65,18 @@ export default function Thumbnails() {
                     setActiveIndex(activeIndex - 1)
                   }}
                 >
-                  anterior
+                  {"< anterior"}
                 </button>
               )}
-              {activeIndex < carsInfo.length && (
+              {carsInfo.length - 1 > activeIndex && (
                 <button
-                  className='all-ease-50 font-bold text-red-500 transition-all duration-500 ease-out hover:underline'
+                  className='all-ease-50 font-bold text-red-600 transition-all duration-500 ease-out hover:underline'
                   onClick={() => setActiveIndex(activeIndex + 1)}
                 >
                   {'próximo veículo >'}
                 </button>
               )}
-            </div>
+            </div>)
           }
         </div>
         <Swiper
@@ -89,8 +96,13 @@ export default function Thumbnails() {
                 <Image
                   src={image.src}
                   alt={image.alt}
-                  className='block h-full w-full object-cover'
+                  className='block h-full w-full object-cover cursor-pointer'
+                  onClick={() => {
+                    setSelectedImage(image.src);
+                    setIsModalOpen(true);
+                  }}
                 />
+
               </div>
             </SwiperSlide>
           ))}
@@ -119,6 +131,26 @@ export default function Thumbnails() {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {isModalOpen && selectedImage && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+            <div className="relative p-4 bg-white rounded-lg max-w-3xl w-full">
+              <button
+                className="absolute top-2 right-2 text-red-600 font-bold text-lg"
+                onClick={() => setIsModalOpen(false)}
+              >
+                ✖
+              </button>
+              <Image
+                src={selectedImage}
+                alt="Imagem ampliada"
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+          </div>
+        )}
+
+
         <div className='mt-4 flex flex-col gap-1'>
           <h3 className='text-2xl font-bold text-white'>
             {carsInfo[activeIndex]?.model}
