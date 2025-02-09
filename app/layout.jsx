@@ -5,8 +5,8 @@ import { Inria_Sans } from 'next/font/google'
 const inria_sans = Inria_Sans({ subsets: ['latin'], weight:['300','400','700'] })
 
 export const metadata = {
-  title: 'MyCarViewer',
-  description: 'desenvolvido por Codetech'
+  title: 'My Car Viewer - Codetech Software',
+  description: 'desenvolvido por Codetech Software, www.codetech.software'
 }
 
 export default function RootLayout({ children }) {
