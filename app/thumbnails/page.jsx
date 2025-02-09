@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -16,6 +16,14 @@ import 'swiper/css/thumbs'
 export default function Page() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+  }, [activeIndex])
 
   return (
     <section className='min-h-screen bg-black py-12'>
@@ -23,22 +31,30 @@ export default function Page() {
         <div className='mb-4'>
           <h2 className='text-2xl font-bold text-white'>MyCarViewer</h2>
           <small>passe para o lado para ver nossos modelos 🔥</small>
-          <div className='flex flex-row items-center gap-4'>
-            <button
-              onClick={() => {
-                if (activeIndex === 0) return
-                setActiveIndex(activeIndex - 1)
-              }}
-            >
-              anterior
-            </button>
-            <button
-              className='all-ease-50 text-red-500 transition-all duration-500 ease-out hover:underline'
-              onClick={() => setActiveIndex(activeIndex + 1)}
-            >
-              {'próximo >'}
-            </button>
-          </div>
+          {loading
+            ? <p className='text-lg text-white font-bold'>Carregando Imagens...</p>
+            : <div className='flex flex-row items-center gap-4 mt-4'>
+              {activeIndex > 0 && (
+                <button
+                  className='font-bold'
+                  onClick={() => {
+                    if (activeIndex === 0) return
+                    setActiveIndex(activeIndex - 1)
+                  }}
+                >
+                  anterior
+                </button>
+              )}
+              {activeIndex < carsInfo.length && (
+                <button
+                  className='all-ease-50 font-bold text-red-500 transition-all duration-500 ease-out hover:underline'
+                  onClick={() => setActiveIndex(activeIndex + 1)}
+                >
+                  {'próximo veículo >'}
+                </button>
+              )}
+            </div>
+          }
         </div>
         <Swiper
           loop={true}
