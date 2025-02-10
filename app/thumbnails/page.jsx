@@ -16,7 +16,7 @@ import 'swiper/css/thumbs'
 export default function Thumbnails() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [valorDeEntrada, setValorDeEntrada] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,9 +27,6 @@ export default function Thumbnails() {
     const numero = Number(apenasNumeros) / 100;
     return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
-
-  console.log('carsInfo.length', carsInfo.length)
-  console.log('activeINdex', activeIndex)
 
   useEffect(() => {
     setLoading(true)
